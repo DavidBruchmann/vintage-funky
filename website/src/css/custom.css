@@ -1,0 +1,95 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* ====== Audio Player Volume Slider Fixes ====== */
+/* Ensure nothing clips the volume slider portal */
+
+html {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  position: static !important;
+}
+
+/* Override any Docusaurus navbar overflow constraints */
+.navbar {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+.navbar__inner {
+  overflow: visible !important;
+}
+
+.navbar-sidebar {
+  overflow: visible !important;
+}
+
+.navbar__brand {
+  overflow: visible !important;
+}
+
+/* Main wrapper should not hide portals */
+.main-wrapper {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+.main-wrapper > * {
+  overflow: visible !important;
+}
+
+#__docusaurus {
+  position: relative !important;
+}
+
+/* Ensure portal elements are not hidden */
+body > div:nth-child(n) {
+  pointer-events: auto !important;
+}
+
+/* Fix for any div that contains portals */
+div[style*="position: fixed"] {
+  pointer-events: auto !important;
+  z-index: 10000 !important;
+  overflow: visible !important;
+}
+
+/* Highest priority for volume slider */
+[class*="volumeSlider"] {
+  pointer-events: auto !important;
+  z-index: 1000 !important;
+  overflow: visible !important;
+}
