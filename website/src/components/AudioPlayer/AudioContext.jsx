@@ -58,13 +58,14 @@ export function AudioProvider({ children }) {
     if (playlist.length > 0 && audioRef.current) {
       const song = playlist[currentIndex];
       audioRef.current.src = song.url;
+      audioRef.current.volume = volume / 100; // Reapply volume after src change
       if (isPlaying) {
         audioRef.current.play().catch(() => {
           // Autoplay may be prevented by browser
         });
       }
     }
-  }, [currentIndex, playlist]);
+  }, [currentIndex, playlist, volume]);
 
   // Update audio volume
   useEffect(() => {
