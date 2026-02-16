@@ -7,7 +7,7 @@ export function AudioProvider({ children }) {
   const [playlist, setPlaylist] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isRandomMode, setIsRandomMode] = useState(false);
+  const [shuffleMode, setShuffleMode] = useState('off'); // 'off', 'all', 'album', 'artist'
   const [volume, setVolume] = useState(35);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -18,7 +18,7 @@ export function AudioProvider({ children }) {
     if (saved) {
       const state = JSON.parse(saved);
       setCurrentIndex(state.currentIndex || 0);
-      setIsRandomMode(state.isRandomMode || false);
+      setShuffleMode(state.shuffleMode || 'off');
       setVolume(state.volume || 35);
     }
   }, []);
@@ -27,11 +27,11 @@ export function AudioProvider({ children }) {
   useEffect(() => {
     const state = {
       currentIndex,
-      isRandomMode,
+      shuffleMode,
       volume,
     };
     localStorage.setItem('audioPlayerState', JSON.stringify(state));
-  }, [currentIndex, isRandomMode, volume]);
+  }, [currentIndex, shuffleMode, volume]);
 
   // Create audio element once on mount
   useEffect(() => {
@@ -90,12 +90,37 @@ export function AudioProvider({ children }) {
     }
   }, [isPlaying, playlist]);
 
+  const getRandomTrack = (currentIdx, filterByAlbum, filterByArtist) => {
+    if (playlist.length === 0) return 0;
+    
+    let candidates = playlist.map((song, idx) => ({ song, idx }));
+    
+    if (filterByAlbum && playlist[currentIdx]) {
+      const currentAlbum = playlist[currentIdx].album;
+      candidates = candidates.filter(c => c.song.album === currentAlbum);
+    }
+    
+    if (filterByArtist && playlist[currentIdx]) {
+      const currentArtist = playlist[currentIdx].artist;
+      candidates = candidates.filter(c => c.song.artist === currentArtist);
+    }
+    
+    if (candidates.length === 0) return 0;
+    return candidates[Math.floor(Math.random() * candidates.length)].idx;
+  };
+
   const handleSongEnd = () => {
-    if (isRandomMode && playlist.length > 0) {
-      const randomIndex = Math.floor(Math.random() * playlist.length);
-      setCurrentIndex(randomIndex);
-    } else {
+    if (shuffleMode === 'off') {
       handleNext();
+    } else if (shuffleMode === 'all') {
+      const randomIdx = getRandomTrack(currentIndex, false, false);
+      setCurrentIndex(randomIdx);
+    } else if (shuffleMode === 'album') {
+      const randomIdx = getRandomTrack(currentIndex, true, false);
+      setCurrentIndex(randomIdx);
+    } else if (shuffleMode === 'artist') {
+      const randomIdx = getRandomTrack(currentIndex, false, true);
+      setCurrentIndex(randomIdx);
     }
   };
 
@@ -118,16 +143,29 @@ export function AudioProvider({ children }) {
     setCurrentIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
   };
 
-  const toggleRandomMode = () => {
-    setIsRandomMode((prev) => {
-      const newRandomMode = !prev;
-      // If enabling random mode, pick a random song
-      if (newRandomMode && playlist.length > 0) {
-        const randomIndex = Math.floor(Math.random() * playlist.length);
-        setCurrentIndex(randomIndex);
+  const cycleShuffleMode = () => {
+    const modes = ['off', 'all', 'album', 'artist'];
+    setShuffleMode((prev) => {
+      const currentIdx = modes.indexOf(prev);
+      const nextIdx = (currentIdx + 1) % modes.length;
+      const newMode = modes[nextIdx];
+      
+      // If enabling shuffle, pick random song
+      if (newMode !== 'off' && playlist.length > 0) {
+        const randomIdx = getRandomTrack(currentIndex, newMode === 'album', newMode === 'artist');
+        setCurrentIndex(randomIdx);
       }
-      return newRandomMode;
+      return newMode;
     });
+  };
+
+  const setShuffleModeDirect = (mode) => {
+    setShuffleMode(mode);
+    // If enabling shuffle, pick random song
+    if (mode !== 'off' && playlist.length > 0) {
+      const randomIdx = getRandomTrack(currentIndex, mode === 'album', mode === 'artist');
+      setCurrentIndex(randomIdx);
+    }
   };
 
   const togglePlayPause = () => {
@@ -143,7 +181,7 @@ export function AudioProvider({ children }) {
     playlist,
     currentIndex,
     isPlaying,
-    isRandomMode,
+    shuffleMode,
     volume,
     currentTime,
     duration,
@@ -158,7 +196,8 @@ export function AudioProvider({ children }) {
     togglePlayPause,
     handleNext,
     handlePrev,
-    toggleRandomMode,
+    cycleShuffleMode,
+    setShuffleModeDirect,
     setVolume,
   };
 

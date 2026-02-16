@@ -55,6 +55,57 @@
   margin-right: 0px;
 }
 
+.shuffleControl {
+  position: relative;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.shuffleMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  min-width: 110px;
+  padding: 4px 0;
+  margin-top: 4px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--ifm-color-emphasis-300, #d0d0d0);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  z-index: 1000;
+}
+
+.shuffleMenu.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.shuffleMenuOption {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--ifm-color-content, #333);
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.shuffleMenuOption:hover {
+  background-color: var(--ifm-color-emphasis-100, #f0f0f0);
+}
+
+.shuffleMenuOption.selected {
+  background-color: var(--ifm-color-emphasis-200, #e0e0e0);
+  font-weight: bold;
+}
+
 .displayText {
   max-width: 180px;
   min-width: 0;

@@ -10,19 +10,22 @@ export function AudioPlayer() {
     playlist,
     currentIndex,
     isPlaying,
-    isRandomMode,
+    shuffleMode,
     volume,
     togglePlayPause,
     handleNext,
     handlePrev,
-    toggleRandomMode,
+    cycleShuffleMode,
+    setShuffleModeDirect,
     setVolume,
   } = useAudio();
 
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
+  const [showShuffleMenu, setShowShuffleMenu] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const volumeButtonRef = useRef(null);
   const volumeSliderRef = useRef(null);
+  const shuffleButtonRef = useRef(null);
 
   // Get current song info
   const currentSong = playlist.length > 0 ? playlist[currentIndex] : null;
@@ -106,16 +109,39 @@ export function AudioPlayer() {
           <i className="fas fa-step-forward"></i>
         </button>
 
-        {/* Randomize Button */}
-        <button
-          className={`${styles.button} ${isRandomMode ? styles.active : ''}`}
-          onClick={toggleRandomMode}
-          disabled={playlist.length === 0}
-          title={isRandomMode ? 'Disable shuffle' : 'Enable shuffle'}
-          aria-label={isRandomMode ? 'Disable shuffle' : 'Enable shuffle'}
+        {/* Randomize Button with Shuffle Mode Menu */}
+        <div
+          className={styles.shuffleControl}
+          ref={shuffleButtonRef}
+          onMouseEnter={() => setShowShuffleMenu(true)}
+          onMouseLeave={() => setShowShuffleMenu(false)}
         >
-          <i className="fas fa-shuffle"></i>
-        </button>
+          <button
+            className={`${styles.button} ${shuffleMode !== 'off' ? styles.active : ''}`}
+            onClick={cycleShuffleMode}
+            disabled={playlist.length === 0}
+            title={`Shuffle: ${shuffleMode}`}
+            aria-label={`Shuffle: ${shuffleMode}`}
+          >
+            <i className="fas fa-shuffle"></i>
+          </button>
+
+          {/* Shuffle Mode Menu - always in DOM */}
+          <div className={`${styles.shuffleMenu} ${showShuffleMenu ? styles.visible : ''}`}>
+            {['off', 'all', 'album', 'artist'].map((mode) => (
+              <div
+                key={mode}
+                className={`${styles.shuffleMenuOption} ${shuffleMode === mode ? styles.selected : ''}`}
+                onClick={() => {
+                  setShuffleModeDirect(mode);
+                  setShowShuffleMenu(false);
+                }}
+              >
+                {mode.charAt(0).toUpperCase() + mode.slice(1)}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Volume/Mute Button with Slider */}
         <div
