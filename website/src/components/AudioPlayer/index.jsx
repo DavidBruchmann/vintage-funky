@@ -26,12 +26,29 @@ export function AudioPlayer() {
   const volumeButtonRef = useRef(null);
   const volumeSliderRef = useRef(null);
   const shuffleButtonRef = useRef(null);
+  const shuffleMenuRef = useRef(null);
+  const textContainerRef = useRef(null);
 
   // Get current song info
   const currentSong = playlist.length > 0 ? playlist[currentIndex] : null;
   const displayText = currentSong
     ? `${currentSong.album} – ${currentSong.filename}`
     : 'No songs loaded';
+
+  // Handle Escape key to close menus
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setShowShuffleMenu(false);
+        setShowVolumeSlider(false);
+      }
+    };
+
+    if (showShuffleMenu || showVolumeSlider) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [showShuffleMenu, showVolumeSlider]);
 
   // Handle volume slider drag
   const handleVolumeMouseDown = () => {
@@ -67,11 +84,28 @@ export function AudioPlayer() {
     };
   }, [isDragging, setVolume]);
 
+  // Handle keyboard volume control (arrow keys)
+  const handleVolumeKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setVolume((prev) => Math.min(100, prev + 5));
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setVolume((prev) => Math.max(0, prev - 5));
+    }
+  };
+
   return (
-    <div className={styles.playerWrapper}>
-      {/* Marquee text in fixed left area */}
-      <div className={styles.textContainer}>
-        <div className={styles.displayText}>{displayText}</div>
+    <div className={styles.playerWrapper} aria-label="Audio player">
+      {/* Marquee text in fixed left area with aria-live for updates */}
+      <div className={styles.textContainer} ref={textContainerRef}>
+        <div 
+          className={styles.displayText} 
+          aria-live="polite"
+          aria-label={`Now playing: ${displayText}`}
+        >
+          {displayText}
+        </div>
       </div>
 
       {/* Player controls on the right */}
@@ -113,12 +147,12 @@ export function AudioPlayer() {
         <div
           className={styles.shuffleControl}
           ref={shuffleButtonRef}
-          onMouseEnter={() => setShowShuffleMenu(true)}
           onMouseLeave={() => setShowShuffleMenu(false)}
         >
           <button
             className={`${styles.button} ${shuffleMode !== 'off' ? styles.active : ''}`}
-            onClick={cycleShuffleMode}
+            onClick={() => setShowShuffleMenu(!showShuffleMenu)}
+            onMouseEnter={() => setShowShuffleMenu(true)}
             disabled={playlist.length === 0}
             title={`Shuffle: ${shuffleMode}`}
             aria-label={`Shuffle: ${shuffleMode}`}
@@ -127,7 +161,10 @@ export function AudioPlayer() {
           </button>
 
           {/* Shuffle Mode Menu - always in DOM */}
-          <div className={`${styles.shuffleMenu} ${showShuffleMenu ? styles.visible : ''}`}>
+          <div 
+            className={`${styles.shuffleMenu} ${showShuffleMenu ? styles.visible : ''}`}
+            onMouseEnter={() => setShowShuffleMenu(true)}
+          >
             {['off', 'all', 'album', 'artist'].map((mode) => (
               <div
                 key={mode}
@@ -135,6 +172,14 @@ export function AudioPlayer() {
                 onClick={() => {
                   setShuffleModeDirect(mode);
                   setShowShuffleMenu(false);
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setShuffleModeDirect(mode);
+                    setShowShuffleMenu(false);
+                  }
                 }}
               >
                 {mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -152,8 +197,8 @@ export function AudioPlayer() {
         >
           <button
             className={`${styles.button} ${volume === 0 ? styles.muted : ''}`}
-            title={volume === 0 ? 'Unmute' : 'Mute'}
-            aria-label={volume === 0 ? 'Unmute' : 'Mute'}
+            title={`${volume === 0 ? 'Unmute' : 'Mute'} (use arrow keys to adjust)`}
+            aria-label={`Volume ${Math.round(volume)}% ${volume === 0 ? '(Unmute)' : '(Mute)'}`}
             onClick={() => setVolume(volume === 0 ? 35 : 0)}
           >
             <i className={`fas ${volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'}`}></i>
@@ -165,6 +210,13 @@ export function AudioPlayer() {
             className={`${styles.volumeSlider} ${showVolumeSlider ? styles.visible : ''}`}
             onMouseDown={handleVolumeMouseDown}
             onMouseUp={handleVolumeMouseUp}
+            role="slider"
+            aria-label="Volume control"
+            aria-valuenow={Math.round(volume)}
+            aria-valuemin="0"
+            aria-valuemax="100"
+            tabIndex={0}
+            onKeyDown={handleVolumeKeyDown}
           >
             <div
               className={styles.volumeTrack}
