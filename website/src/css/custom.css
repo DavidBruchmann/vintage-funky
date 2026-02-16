@@ -47,6 +47,8 @@ body {
 .navbar {
   overflow: visible !important;
   position: relative !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 .navbar__inner {
@@ -92,4 +94,14 @@ div[style*="position: fixed"] {
   pointer-events: auto !important;
   z-index: 1000 !important;
   overflow: visible !important;
+}
+
+/* Audio bar wrapper positioning in navbar */
+[class*="audioBarWrapper"] {
+  position: absolute !important;
+  top: 0 !important;
+  right: 16px !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
 }

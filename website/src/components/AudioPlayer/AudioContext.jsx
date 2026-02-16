@@ -57,7 +57,12 @@ export function AudioProvider({ children }) {
   useEffect(() => {
     if (playlist.length > 0 && audioRef.current) {
       const song = playlist[currentIndex];
-      audioRef.current.src = song.url;
+      // Handle both dev (/mp3) and production (/vintage-funky/mp3) paths
+      let src = song.url;
+      if (!src.includes('/vintage-funky/') && src.startsWith('/mp3')) {
+        src = '/vintage-funky' + src;
+      }
+      audioRef.current.src = src;
       audioRef.current.volume = volume / 100; // Reapply volume after src change
       if (isPlaying) {
         audioRef.current.play().catch(() => {

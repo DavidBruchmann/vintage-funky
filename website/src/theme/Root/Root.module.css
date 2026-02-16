@@ -1,0 +1,8 @@
+.audioBarWrapper {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  z-index: 999;
+  pointer-events: auto;
+}
+

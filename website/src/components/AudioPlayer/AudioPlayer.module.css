@@ -2,35 +2,40 @@
   display: flex;
   position: relative;
   overflow: visible;
+  align-items: center;
+  gap: 16px;
+  padding: 0 8px;
+  height: 60px;
 }
 
 .textContainer {
-  flex: 0 0 200px;
-  padding: 8px 16px;
-  background-color: var(--ifm-navbar-background-color, #fff);
-  border-bottom: 1px solid var(--ifm-color-emphasis-200, #e0e0e0);
+  flex: 0 0 180px;
+  padding: 0;
+  background-color: transparent;
+  border-bottom: none;
   display: flex;
   align-items: center;
-  overflow: visible;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .audioPlayer {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
-  background-color: var(--ifm-navbar-background-color, #fff);
-  border-bottom: 1px solid var(--ifm-color-emphasis-200, #e0e0e0);
+  padding: 0;
+  background-color: transparent;
+  border-bottom: none;
   overflow: visible;
   position: relative;
-  flex: 1;
+  flex: 0 0 auto;
 }
 
 .displayText {
-  max-width: 200px;
+  max-width: 180px;
   min-width: 0;
   overflow: hidden;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--ifm-color-content, #333);
   animation: marquee 15s linear infinite;
   white-space: nowrap;

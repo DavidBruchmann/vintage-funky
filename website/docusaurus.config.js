@@ -108,6 +108,10 @@ const config = {
             position: 'left'
           },
           {
+            type: 'custom-AudioPlayer',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/DavidBruchmann/vintage-funky',
             label: 'GitHub',
             position: 'right',

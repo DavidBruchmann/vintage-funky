@@ -10,12 +10,26 @@ export function useLoadPlaylist() {
   useEffect(() => {
     const loadPlaylist = async () => {
       try {
-        const response = await fetch('/playlist-manifest.json');
-        
-        if (response.ok) {
-          const songs = await response.json();
-          setPlaylist(songs);
+        // Try to load from different possible paths
+        const possiblePaths = [
+          '/vintage-funky/playlist-manifest.json', // Production path
+          '/playlist-manifest.json', // Dev path
+        ];
+
+        for (const path of possiblePaths) {
+          try {
+            const response = await fetch(path);
+            if (response.ok) {
+              const songs = await response.json();
+              setPlaylist(songs);
+              return;
+            }
+          } catch (e) {
+            // Continue to next path
+          }
         }
+
+        console.warn('Failed to load playlist manifest from any path');
       } catch (error) {
         console.warn('Failed to load playlist manifest:', error);
       }
