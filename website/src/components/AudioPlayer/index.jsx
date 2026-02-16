@@ -32,7 +32,7 @@ export function AudioPlayer() {
   const shuffleMenuRef = useRef(null);
   const textContainerRef = useRef(null);
   const helpButtonRef = useRef(null);
-  
+
   // Array of button refs for roving tabindex (order: prev, play, next, shuffle, volume)
   const buttonRefs = useRef([
     useRef(null), // prev
@@ -44,9 +44,18 @@ export function AudioPlayer() {
 
   // Get current song info
   const currentSong = playlist.length > 0 ? playlist[currentIndex] : null;
-  const displayText = currentSong
-    ? `${currentSong.album} – ${currentSong.filename}`
-    : 'No songs loaded';
+  let collectTexts = [], n=0;
+  let displayText;
+  if (currentSong) {
+    displayText = [
+      currentSong.artist,
+      currentSong.album ? `[${currentSong.album}]` : '',
+      currentSong.filename
+    ].filter(Boolean).join(' ');
+    if (!displayText) {
+      displayText = 'No songs loaded';
+    }
+  }
 
   // Handle Escape key to close menus
   useEffect(() => {
@@ -56,14 +65,14 @@ export function AudioPlayer() {
         setShowVolumeSlider(false);
         setShowHelpModal(false);
       }
-      
+
       // Alt+F7 to focus player
       if (e.altKey && e.key === 'F7') {
         e.preventDefault();
         setFocusedButtonIndex(0);
         buttonRefs.current[0].current?.focus();
       }
-      
+
       // ? to open help modal
       if (e.key === '?' && !showHelpModal) {
         e.preventDefault();
@@ -157,8 +166,8 @@ export function AudioPlayer() {
     <div className={styles.playerWrapper} aria-label="Audio player">
       {/* Marquee text in fixed left area with aria-live for updates */}
       <div className={styles.textContainer} ref={textContainerRef}>
-        <div 
-          className={styles.displayText} 
+        <div
+          className={styles.displayText}
           aria-live="polite"
           aria-label={`Now playing: ${displayText}`}
         >
@@ -237,7 +246,7 @@ export function AudioPlayer() {
           </button>
 
           {/* Shuffle Mode Menu - always in DOM */}
-          <div 
+          <div
             className={`${styles.shuffleMenu} ${showShuffleMenu ? styles.visible : ''}`}
             onMouseEnter={() => setShowShuffleMenu(true)}
             ref={shuffleMenuRef}

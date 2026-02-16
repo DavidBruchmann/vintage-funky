@@ -22,6 +22,17 @@
 }
 
 .textContainer {
+  flex: 0 0 180px;      /* Do not grow, do not shrink, stay 180px */
+  width: 180px;         /* Explicit width */
+  max-width: 180px;     /* Hard limit */
+  overflow: hidden;     /* Clip anything larger than 180px */
+  display: block;       /* Changed from flex to block to stabilize inner text */
+  position: relative;
+  white-space: nowrap;
+}
+
+/*
+.textContainer {
   flex: 0 0 180px;
   padding: 0;
   margin: 3px;
@@ -34,6 +45,7 @@
   pointer-events: auto;
   border-radius: 4px;
 }
+*/
 
 .audioPlayer {
   display: flex;
@@ -141,6 +153,16 @@
 }
 
 .displayText {
+  display: inline-block;
+  width: auto;           /* Let it be as long as it needs to be */
+  min-width: 100%;
+  overflow: visible;
+  white-space: nowrap;
+  animation: marquee 15s linear infinite;
+  /* Remove any max-width here */
+}
+/*
+.displayText {
   max-width: 180px;
   min-width: 0;
   overflow: hidden;
@@ -149,14 +171,22 @@
   animation: marquee 15s linear infinite;
   white-space: nowrap;
 }
-
+*/
 /* Respect prefers-reduced-motion for animations */
 @media (prefers-reduced-motion: reduce) {
   .displayText {
     animation: none;
   }
 }
-
+@keyframes marquee {
+  0% {
+    transform: translateX(180px); /* Start at the right edge of the 180px window */
+  }
+  100% {
+    transform: translateX(-100%); /* Slide until the text's own length is gone */
+  }
+}
+/*
 @keyframes marquee {
   0% {
     transform: translateX(100%);
@@ -165,6 +195,7 @@
     transform: translateX(-100%);
   }
 }
+*/
 
 .button {
   padding: 8px 12px;
