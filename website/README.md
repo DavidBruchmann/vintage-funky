@@ -2,6 +2,8 @@
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
+As individual feature there is an audio player in the header bar.
+
 ## Installation
 
 ```bash
