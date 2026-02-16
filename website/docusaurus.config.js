@@ -10,7 +10,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
+  title: 'Vintage Funky',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
@@ -20,10 +20,10 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://davidbruchmann.github.io/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/vintage-funky/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -53,19 +53,26 @@ const config = {
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
           showReadingTime: true,
+          // Please change this to your repo, or remove this to remove the "edit this page" links:
+          // editUrl: 'https://github.com/DavidBruchmann/vintage-funky'.
           feedOptions: {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
+          /*
+          socials: {
+            youtube: 'https://youtube.com',
+            kofi: 'https://ko-fi.com',
+            paypal: 'https://paypal.me',
+          },
+          */
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -83,7 +90,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'My Site',
+        title: 'Vintage Funky',
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
@@ -95,9 +102,13 @@ const config = {
             position: 'left',
             label: 'Tutorial',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            to: '/blog',
+            label: 'Blog',
+            position: 'left'
+          },
+          {
+            href: 'https://github.com/DavidBruchmann/vintage-funky',
             label: 'GitHub',
             position: 'right',
           },
@@ -119,16 +130,20 @@ const config = {
             title: 'Community',
             items: [
               {
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/david-bruchmann-069b9519/',
+              },
+              {
                 label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                href: 'https://stackoverflow.com/users/1019850/david',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Xing',
+                href: 'https://www.xing.com/profile/David_Bruchmann/',
               },
               {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: 'Support my work ♥️',
+                href: 'https://www.ko-fi.com/profile/David_Bruchmann/',
               },
             ],
           },
@@ -141,12 +156,12 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/DavidBruchmann/vintage-funky',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} David Bruchmann. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
