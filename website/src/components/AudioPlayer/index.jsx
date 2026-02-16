@@ -81,7 +81,7 @@ export function AudioPlayer() {
           title="Previous"
           aria-label="Previous track"
         >
-          ⏮
+          <i className="fas fa-step-backward"></i>
         </button>
 
         {/* Play/Stop Toggle */}
@@ -92,7 +92,7 @@ export function AudioPlayer() {
           title={isPlaying ? 'Pause' : 'Play'}
           aria-label={isPlaying ? 'Pause' : 'Play'}
         >
-          {isPlaying ? '⏸' : '▶'}
+          <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
         </button>
 
         {/* Next Button */}
@@ -103,7 +103,7 @@ export function AudioPlayer() {
           title="Next"
           aria-label="Next track"
         >
-          ⏭
+          <i className="fas fa-step-forward"></i>
         </button>
 
         {/* Randomize Button */}
@@ -114,7 +114,7 @@ export function AudioPlayer() {
           title={isRandomMode ? 'Disable shuffle' : 'Enable shuffle'}
           aria-label={isRandomMode ? 'Disable shuffle' : 'Enable shuffle'}
         >
-          🔀
+          <i className="fas fa-shuffle"></i>
         </button>
 
         {/* Volume/Mute Button with Slider */}
@@ -125,12 +125,12 @@ export function AudioPlayer() {
           onMouseLeave={() => setShowVolumeSlider(false)}
         >
           <button
-            className={styles.button}
+            className={`${styles.button} ${volume === 0 ? styles.muted : ''}`}
             title={volume === 0 ? 'Unmute' : 'Mute'}
             aria-label={volume === 0 ? 'Unmute' : 'Mute'}
             onClick={() => setVolume(volume === 0 ? 35 : 0)}
           >
-            {volume === 0 ? '🔇' : volume < 50 ? '🔉' : '🔊'}
+            <i className={`fas ${volume === 0 ? 'fa-volume-mute' : 'fa-volume-up'}`}></i>
           </button>
 
           {/* Volume Slider Popup - always in DOM */}
@@ -139,18 +139,19 @@ export function AudioPlayer() {
             className={`${styles.volumeSlider} ${showVolumeSlider ? styles.visible : ''}`}
             onMouseDown={handleVolumeMouseDown}
             onMouseUp={handleVolumeMouseUp}
-            onClick={(e) => {
-              const rect = volumeSliderRef.current.getBoundingClientRect();
-              const y = e.clientY - rect.top;
-              const height = rect.height;
-              const newVolume = Math.max(0, Math.min(100, 100 - (y / height) * 100));
-              setVolume(newVolume);
-            }}
           >
             <div
               className={styles.volumeTrack}
               style={{
                 background: `linear-gradient(to bottom, #666 0%, #666 ${100 - volume}%, #1e90ff ${100 - volume}%, #1e90ff 100%)`,
+              }}
+              onClick={(e) => {
+                if (!volumeSliderRef.current) return;
+                const rect = volumeSliderRef.current.getBoundingClientRect();
+                const y = e.clientY - rect.top;
+                const height = rect.height;
+                const newVolume = Math.max(0, Math.min(100, 100 - (y / height) * 100));
+                setVolume(newVolume);
               }}
             >
               <div

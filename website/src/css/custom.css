@@ -4,6 +4,9 @@
  * work well for content-centric websites.
  */
 
+/* Import Font Awesome */
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #2e8555;
@@ -33,7 +36,7 @@
 /* Ensure nothing clips the volume slider portal */
 
 html {
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   overflow-x: hidden !important;
 }
 
@@ -96,12 +99,15 @@ div[style*="position: fixed"] {
   overflow: visible !important;
 }
 
-/* Audio bar wrapper positioning in navbar */
-[class*="audioBarWrapper"] {
-  position: absolute !important;
-  top: 0 !important;
-  right: 16px !important;
-  height: auto !important;
-  display: flex !important;
-  align-items: center !important;
+/* Audio player navbar styling - theme aware with increased contrast */
+[class*="audioPlayer"] {
+  background-color: var(--ifm-navbar-background-color, #fff);
+}
+
+:global([data-theme='light']) [class*="audioPlayer"] {
+  background-color: rgba(0, 0, 0, 0.18);
+}
+
+:global([data-theme='dark']) [class*="audioPlayer"] {
+  background-color: rgba(255, 255, 255, 0.18);
 }

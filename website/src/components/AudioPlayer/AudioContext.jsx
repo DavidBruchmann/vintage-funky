@@ -70,7 +70,7 @@ export function AudioProvider({ children }) {
         });
       }
     }
-  }, [currentIndex, playlist, volume]);
+  }, [currentIndex, playlist]);
 
   // Update audio volume
   useEffect(() => {

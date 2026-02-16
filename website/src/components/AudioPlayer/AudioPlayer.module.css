@@ -3,32 +3,56 @@
   position: relative;
   overflow: visible;
   align-items: center;
-  gap: 16px;
-  padding: 0 8px;
-  height: 60px;
+  gap: 3px;
+  padding: 0 2px;
+  height: 32px;
+  pointer-events: none;
+  margin-top: 4px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+  margin-left: 4px;
+}
+
+:global([data-theme='light']) .playerWrapper {
+  background-color: rgba(0, 0, 0, 0.18);
+}
+
+:global([data-theme='dark']) .playerWrapper {
+  background-color: rgba(255, 255, 255, 0.18);
 }
 
 .textContainer {
   flex: 0 0 180px;
   padding: 0;
-  background-color: transparent;
-  border-bottom: none;
+  margin: 3px;
+  background-color: var(--ifm-navbar-background-color, #fff);
+  border: 1px solid var(--ifm-color-emphasis-300, #d0d0d0);
   display: flex;
   align-items: center;
   overflow: hidden;
   min-width: 0;
+  pointer-events: auto;
+  border-radius: 4px;
 }
 
 .audioPlayer {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0;
   padding: 0;
   background-color: transparent;
   border-bottom: none;
   overflow: visible;
   position: relative;
   flex: 0 0 auto;
+}
+
+.audioPlayer > .button:first-child {
+  margin-left: 3px;
+}
+
+.audioPlayer > .volumeControl {
+  margin-right: 0px;
 }
 
 .displayText {
@@ -55,11 +79,18 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
-  font-size: 1.3rem;
+  font-size: 1rem;
   border-radius: 4px;
   transition: background-color 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 32px;
+  font-family: monospace;
+  pointer-events: auto;
 }
 
 .button:hover:not(:disabled) {
@@ -72,27 +103,44 @@
 }
 
 .button.active {
-  background-color: var(--ifm-color-primary-light, #e6f0ff);
-  color: var(--ifm-color-primary, #1e90ff);
+  border-bottom: 4px solid var(--ifm-color-emphasis-600, #666);
+  padding-bottom: 0px;
+}
+
+.button.muted {
+  color: #d32f2f;
+}
+
+/* Shuffle button - no filter needed for monochrome Unicode */
+.shuffleButton {
+  /* removed filter */
+}
+
+:global([data-theme='light']) .shuffleButton {
+  /* no filter needed */
+}
+
+:global([data-theme='dark']) .shuffleButton {
+  /* no filter needed */
 }
 
 .volumeControl {
   position: relative;
   display: flex;
   align-items: center;
-  overflow: visible;
+  pointer-events: auto;
 }
 
 .volumeSlider {
   position: absolute;
-  bottom: 100%;
-  right: 0;
-  top: 10px;
-  width: 30px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
   height: 120px;
-  padding: 8px 0;
+  padding: 8px 4px;
   cursor: pointer;
-  margin-bottom: 0;
+  margin-top: 4px;
   background-color: rgba(255, 255, 255, 0.95);
   border: 2px solid var(--ifm-color-emphasis-300, #d0d0d0);
   border-radius: 6px;
@@ -102,6 +150,7 @@
   pointer-events: none;
   transition: opacity 0.2s ease, visibility 0.2s ease;
   z-index: 1000;
+  box-sizing: border-box;
 }
 
 .volumeSlider.visible {
@@ -119,6 +168,7 @@
   background: linear-gradient(to bottom, #f5f5f5 0%, #f5f5f5 100%);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .volumeThumb {
@@ -129,6 +179,7 @@
   width: 16px;
   height: 16px;
   background-color: #1e90ff;
+  border: 2px solid #fff;
   border-radius: 50%;
   cursor: grab;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -137,6 +188,15 @@
 
 .volumeThumb:hover {
   box-shadow: 0 2px 8px rgba(30, 144, 255, 0.5);
+}
+
+/* Theme-aware active state - light theme darker border, dark theme lighter */
+:global([data-theme='light']) .button.active {
+  border-bottom-color: #555;
+}
+
+:global([data-theme='dark']) .button.active {
+  border-bottom-color: #aaa;
 }
 
 @media (max-width: 768px) {
