@@ -22,6 +22,7 @@ export function AudioPlayer() {
 
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [showShuffleMenu, setShowShuffleMenu] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [focusedButtonIndex, setFocusedButtonIndex] = useState(0);
   const [focusedShuffleOptionIndex, setFocusedShuffleOptionIndex] = useState(0);
@@ -30,6 +31,7 @@ export function AudioPlayer() {
   const shuffleButtonRef = useRef(null);
   const shuffleMenuRef = useRef(null);
   const textContainerRef = useRef(null);
+  const helpButtonRef = useRef(null);
   
   // Array of button refs for roving tabindex (order: prev, play, next, shuffle, volume)
   const buttonRefs = useRef([
@@ -52,14 +54,26 @@ export function AudioPlayer() {
       if (e.key === 'Escape') {
         setShowShuffleMenu(false);
         setShowVolumeSlider(false);
+        setShowHelpModal(false);
+      }
+      
+      // Alt+F7 to focus player
+      if (e.altKey && e.key === 'F7') {
+        e.preventDefault();
+        setFocusedButtonIndex(0);
+        buttonRefs.current[0].current?.focus();
+      }
+      
+      // ? to open help modal
+      if (e.key === '?' && !showHelpModal) {
+        e.preventDefault();
+        setShowHelpModal(true);
       }
     };
 
-    if (showShuffleMenu || showVolumeSlider) {
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [showShuffleMenu, showVolumeSlider]);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showHelpModal]);
 
   // Handle volume slider drag
   const handleVolumeMouseDown = () => {
@@ -303,7 +317,97 @@ export function AudioPlayer() {
             </div>
           </div>
         </div>
+
+        {/* Help Button */}
+        <button
+          ref={helpButtonRef}
+          className={styles.button}
+          onClick={() => setShowHelpModal(true)}
+          title="Show keyboard shortcuts (? or Alt+F7)"
+          aria-label="Show keyboard shortcuts"
+        >
+          <i className="fas fa-circle-question"></i>
+        </button>
       </div>
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div className={styles.modalOverlay} onClick={() => setShowHelpModal(false)} role="presentation">
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <div className={styles.modalHeader}>
+              <h3>Keyboard Shortcuts</h3>
+              <button
+                className={styles.modalClose}
+                onClick={() => setShowHelpModal(false)}
+                aria-label="Close help"
+                type="button"
+              >
+                ×
+              </button>
+            </div>
+            <div className={styles.modalContent}>
+              <div className={styles.shortcutGroup}>
+                <h4>Player Navigation</h4>
+                <div className={styles.shortcutItem}>
+                  <kbd>Alt+F7</kbd> <span>Focus player</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>Tab</kbd> <span>Enter player (focus first button)</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>←</kbd> <kbd>→</kbd> <span>Navigate between buttons</span>
+                </div>
+              </div>
+
+              <div className={styles.shortcutGroup}>
+                <h4>Playback Controls</h4>
+                <div className={styles.shortcutItem}>
+                  <kbd>Space</kbd> <span>Play / Pause</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>←</kbd> <span>Previous track (when focused)</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>→</kbd> <span>Next track (when focused)</span>
+                </div>
+              </div>
+
+              <div className={styles.shortcutGroup}>
+                <h4>Shuffle Modes</h4>
+                <div className={styles.shortcutItem}>
+                  <kbd>Space</kbd> <span>Open/close shuffle menu</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>↑</kbd> <kbd>↓</kbd> <span>Navigate modes</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>Enter</kbd> <span>Select mode</span>
+                </div>
+              </div>
+
+              <div className={styles.shortcutGroup}>
+                <h4>Volume Control</h4>
+                <div className={styles.shortcutItem}>
+                  <kbd>Space</kbd> <span>Mute / Unmute (when volume focused)</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>↑</kbd> <kbd>↓</kbd> <span>Adjust volume</span>
+                </div>
+              </div>
+
+              <div className={styles.shortcutGroup}>
+                <h4>General</h4>
+                <div className={styles.shortcutItem}>
+                  <kbd>?</kbd> <span>Show this help</span>
+                </div>
+                <div className={styles.shortcutItem}>
+                  <kbd>Esc</kbd> <span>Close menus / Help</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

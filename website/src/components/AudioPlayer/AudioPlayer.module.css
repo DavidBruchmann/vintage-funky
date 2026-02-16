@@ -350,3 +350,118 @@
     height: 100px;
   }
 }
+
+/* Help Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal {
+  background-color: var(--ifm-navbar-background-color, #fff);
+  border-radius: 12px;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 2001;
+}
+
+:global([data-theme='dark']) .modal {
+  background-color: #1e1e1e;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-300, #d0d0d0);
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ifm-color-content, #333);
+}
+
+.modalClose:hover {
+  background-color: var(--ifm-color-emphasis-100, #f0f0f0);
+  border-radius: 4px;
+}
+
+.modalContent {
+  padding: 20px;
+}
+
+.shortcutGroup {
+  margin-bottom: 20px;
+}
+
+.shortcutGroup h4 {
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-800, #333);
+}
+
+:global([data-theme='dark']) .shortcutGroup h4 {
+  color: #e0e0e0;
+}
+
+.shortcutItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.shortcutItem kbd {
+  background-color: var(--ifm-color-emphasis-200, #e0e0e0);
+  border: 1px solid var(--ifm-color-emphasis-400, #bbb);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 500;
+  min-width: 45px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+:global([data-theme='dark']) .shortcutItem kbd {
+  background-color: #333;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+.shortcutItem span {
+  flex: 1;
+  color: var(--ifm-color-content, #666);
+}
+
+:global([data-theme='dark']) .shortcutItem span {
+  color: #b0b0b0;
+}
