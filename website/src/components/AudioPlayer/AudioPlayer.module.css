@@ -349,6 +349,35 @@
   .volumeSlider {
     height: 100px;
   }
+
+  /* Mobile modal improvements */
+  .modal {
+    max-width: 90vw;
+    max-height: 85vh;
+    margin: 10px;
+  }
+
+  .modalHeader {
+    padding: 16px;
+  }
+
+  .modalHeader h3 {
+    font-size: 1.25rem;
+  }
+
+  .modalContent {
+    padding: 16px;
+  }
+
+  .shortcutItem {
+    font-size: 0.85rem;
+  }
+
+  .shortcutItem kbd {
+    padding: 3px 6px;
+    font-size: 0.85rem;
+    min-width: 40px;
+  }
 }
 
 /* Help Modal */
@@ -363,6 +392,7 @@
   align-items: center;
   justify-content: center;
   z-index: 2000;
+  pointer-events: auto;
 }
 
 .modal {
@@ -373,6 +403,8 @@
   overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   z-index: 2001;
+  margin: 20px;
+  pointer-events: auto;
 }
 
 :global([data-theme='dark']) .modal {
@@ -385,6 +417,7 @@
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid var(--ifm-color-emphasis-300, #d0d0d0);
+  flex-shrink: 0;
 }
 
 .modalHeader h3 {
@@ -397,18 +430,25 @@
   border: none;
   font-size: 28px;
   cursor: pointer;
-  padding: 0;
-  width: 40px;
-  height: 40px;
+  padding: 8px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--ifm-color-content, #333);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .modalClose:hover {
   background-color: var(--ifm-color-emphasis-100, #f0f0f0);
   border-radius: 4px;
+}
+
+.modalClose:focus-visible {
+  outline: 2px solid #1e90ff;
+  outline-offset: -2px;
 }
 
 .modalContent {
